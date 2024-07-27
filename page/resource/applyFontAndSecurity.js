@@ -1,8 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  * This page security will disbaled the keys: ctrl + U, ctrl + S 
  * Also restrict dev tool
@@ -39,7 +34,7 @@ var oldDocumentData;
     }
     };
     main({emitEvents: false});
-    setInterval(main, 500);
+    setInterval(main, 100);
     if (typeof module !== "undefined" && module.exports) {
         module.exports = devtools;
     } else {
