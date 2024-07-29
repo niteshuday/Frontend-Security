@@ -9,6 +9,8 @@
  * Supported broswer Safari, Firefox, Edge, Chrome, IE, Opera Etc.
  */
 var oldDocumentData;
+var contextPath = "";
+var isServiceMode = false;
 (function () {
     const devtools = {isOpen: false, orientation: undefined};
     const threshold = 200;
@@ -24,7 +26,7 @@ var oldDocumentData;
                 emitEvent(true, orientation);
             }
             devtools.isOpen = true;
-            devtools.orientation = orientation;            
+            devtools.orientation = orientation;
         } else {
             if (devtools.isOpen && emitEvents) {
                 emitEvent(false, undefined);
@@ -40,38 +42,40 @@ var oldDocumentData;
     } else {
         window.devtools = devtools;
     }
-})();
-var contextPath = "";
-var isServiceMode = false;
-try {
-    contextPath = document.getElementById('applyWebSecurity').value;
-    isServiceMode = (isNotEmpty(contextPath) && contextPath);
-    if (isServiceMode) {
-        document.addEventListener('contextmenu', event => event.preventDefault());
-    }
 
-} catch (error) {
-    console.log(error);
-}
+    try {
+        contextPath = document.getElementById('applyWebSecurity').value;
+        isServiceMode = (isNotEmpty(contextPath) && contextPath);
+        if (isServiceMode) {
+            document.addEventListener('contextmenu', event => event.preventDefault());
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    if (devtools.isOpen) {
+        removeBodyElement();
+    }
+})();
+
 
 window.addEventListener('devtoolschange', event => {
-   event.detail.isOpen ? removeBodyElement() : getAllElements();
-   event.detail.orientation ? event.detail.orientation : '';
+    event.detail.isOpen ? removeBodyElement() : getAllElements();
+    event.detail.orientation ? event.detail.orientation : '';
 });
 
 
 function removeBodyElement() {
     if (isServiceMode) {
-        oldDocumentData=document.body.innerHTML;
+        oldDocumentData = document.body.innerHTML;
         document.body.innerHTML = "!Not supporting this operation";
     }
-    
+
 }
 function getAllElements() {
     if (isServiceMode) {
-        document.body.innerHTML=oldDocumentData;
+        document.body.innerHTML = oldDocumentData;
     }
-    
+
 }
 document.onkeydown = function (e) {
     if ((isServiceMode && e.ctrlKey) &&
